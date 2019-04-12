@@ -50,7 +50,7 @@ def plotGraph(distList):
 def Compute_dist_by_shifts_bits_using_levenshtein(originalKeyStr, monitoredKeysStr):
     '''
     this function Compute dist by shifts bits using levenshtein in monitoredKeysStr
-    
+
     :param originalKeyStr: the original key
     :param monitoredKeysStr: the monitored data in which we have to find string that matches 
         the original key with minimum levenshtein 
@@ -61,7 +61,7 @@ def Compute_dist_by_shifts_bits_using_levenshtein(originalKeyStr, monitoredKeysS
     '''
     listOfAllDicts = []
     distValuesList = []
-    
+
     #calculate how many keys can be in the given monitoredKeysStr
     # xxxxx =>5
     # yyyy =>4
@@ -73,16 +73,17 @@ def Compute_dist_by_shifts_bits_using_levenshtein(originalKeyStr, monitoredKeysS
         print i
         tempStr = monitoredKeysStr[i: i+originalKeyLen]
 
-        #dict = GabiFuncs.levenshtein_edit_dist(originalKeyStr, tempStr, show_strings=False)
-
-        dict=({"DIST":1,"I":2,"D":3,"F":4},)
-        if GabiFuncs.hamming_dist(originalKeyStr,tempStr) < len(originalKeyStr)/8:
+        if defines.FILTER_USING_HAMMING:
             dict = GabiFuncs.levenshtein_edit_dist(originalKeyStr, tempStr, show_strings=False)
         else:
-            dict[0]["DIST"]=len(originalKeyStr)/8
-            dict[0]["I"] = len(originalKeyStr) / 8
-            dict[0]["F"] = len(originalKeyStr) / 8
-            dict[0]["D"] = len(originalKeyStr) / 8
+            dict=({"DIST":1,"I":2,"D":3,"F":4},)
+            if GabiFuncs.hamming_dist(originalKeyStr,tempStr) < len(originalKeyStr)/4:
+                dict = GabiFuncs.levenshtein_edit_dist(originalKeyStr, tempStr, show_strings=False)
+            else:
+                dict[0]["DIST"]=len(originalKeyStr)/4
+                dict[0]["I"] = len(originalKeyStr) / 4
+                dict[0]["F"] = len(originalKeyStr) / 4
+                dict[0]["D"] = len(originalKeyStr) / 4
 
         listOfAllDicts.append(dict[0])
         print dict[0]
@@ -96,13 +97,13 @@ def Compute_dist_by_shifts_bits_using_levenshtein(originalKeyStr, monitoredKeysS
 def FinedAllMinimumsDicts(listOfAllDicts, distValuesList, numberOfAvalibleKeys, len):
     """
         this function finds all the minimus distances in
-         
-    :param listOfAllDicts: 
-    :param distValuesList: 
-    :param numberOfAvalibleKeys: 
-    :param len: 
-    :return listOfAllDictsWithMinimumDist: 
-    :return allMinmunsIndex: 
+
+    :param listOfAllDicts:
+    :param distValuesList:
+    :param numberOfAvalibleKeys:
+    :param len:
+    :return listOfAllDictsWithMinimumDist:
+    :return allMinmunsIndex:
     """
     listOfAllDictsWithMinimumDist = []
     allMinmunsIndex = []
@@ -133,9 +134,9 @@ def FinedAllMinimumsDicts(listOfAllDicts, distValuesList, numberOfAvalibleKeys, 
 
 def CaclulateAvg(listOfAllDictsWithMinimumDist):
     '''
-    
+
     :param listOfAllDictsWithMinimumDist: list of dictionaries that holds computeation of all the minimum errors in monitored data string collected from cache LLC side channel using levenshtein distance
-        (error rate includes distance, flips, deletions , insertion) 
+        (error rate includes distance, flips, deletions , insertion)
     :return: dict with the  average distance, average flips, average deletions , average insertion
         {"insertionAVG": _; "deletionAVG": _; "flipsAVG": _, "LevDistAVG" _}
     '''
@@ -160,16 +161,16 @@ def CaclulateAvg(listOfAllDictsWithMinimumDist):
 
 def ComputeAvgOfAllMinumumsInMonitoredKeys(originalKeyStr, monitoredKeysStr):
     '''
-    This is the main function which computes 
+    This is the main function which computes
     the average error in monitored data string collected from cache LLC side channel using levenshtein distance
-    error rate includes average distance, average flips, average deletions , average insertion 
-    and plots graph 
+    error rate includes average distance, average flips, average deletions , average insertion
+    and plots graph
     :param originalKeyStr: the original key
-    :param monitoredKeysStr: the monitored data in which we have to find string that matches 
-        the original key with minimum levenshtein 
+    :param monitoredKeysStr: the monitored data in which we have to find string that matches
+        the original key with minimum levenshtein
     :return: None
     '''
-    
+
     conclusiton = {}
 
     listOfAllDicts, distValuesList, numberOfAvalibleKeys = Compute_dist_by_shifts_bits_using_levenshtein(originalKeyStr, monitoredKeysStr)
@@ -189,7 +190,7 @@ def ComputeAvgOfAllMinumumsInMonitoredKeys(originalKeyStr, monitoredKeysStr):
     print allMinmunsIndex
     FILE_FOR_MORE_INFORMATION.write("%s\n" % allMinmunsIndex)
 
-    conclusiton = CaclulateAvg(listOfAllDictsWithMinimumDist) 
+    conclusiton = CaclulateAvg(listOfAllDictsWithMinimumDist)
 
     str = "THE AVRAGE OF NOISE IS:"
     print str
@@ -201,11 +202,11 @@ def ComputeAvgOfAllMinumumsInMonitoredKeys(originalKeyStr, monitoredKeysStr):
 
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     FILE_FOR_ALL_DICTS = open('./data/listOfAllDicts.txt', 'w')
     FILE_FOR_ALL_MINIMUM_DICTS = open('./data/listOfAllDictsWithMinimumDist.txt', 'w')
     FILE_FOR_MORE_INFORMATION = open('./data/moreInfo.txt', 'w')
-        
+
     originalKeyFile = open(defines.FILE_ORIGINAL_KEY, "rt") #open file
     # originalKeyStr = originalKeyFile.readline()
     originalKeyStr = originalKeyFile.read().replace('\n','').replace(' ','').replace(',','')
