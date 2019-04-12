@@ -73,7 +73,7 @@ def Compute_dist_by_shifts_bits_using_levenshtein(originalKeyStr, monitoredKeysS
         print i
         tempStr = monitoredKeysStr[i: i+originalKeyLen]
 
-        if defines.FILTER_USING_HAMMING:
+        if not defines.FILTER_USING_HAMMING:
             dict = GabiFuncs.levenshtein_edit_dist(originalKeyStr, tempStr, show_strings=False)
         else:
             dict=({"DIST":1,"I":2,"D":3,"F":4},)
