@@ -49,13 +49,14 @@ def plotGraph(distList):
 
 def Compute_dist_by_shifts_bits_using_levenshtein(originalKeyStr, monitoredKeysStr):
     '''
-
+    this function Compute dist by shifts bits using levenshtein in monitoredKeysStr
+    
     :param originalKeyStr: the original key
     :param monitoredKeysStr: the monitored data in which we have to find string that matches 
         the original key with minimum levenshtein 
-    :return listOfAllDicts: list of dicts with the  distance, flips, deletions , insertion {"DIST": _; "I": _; "F": _, "D"_X}
-    :return distValuesList: 
-    :return numberOfAvalibleKeys: 
+    :return listOfAllDicts: list of dicts with the distance, flips, deletions , insertion #{"DIST": _; "I": _; "F": _, "D"_X}
+    :return distValuesList: list of all distance calculated
+    :return numberOfAvalibleKeys: number of avalible keys  can be in the given monitoredKeysStr
 
     '''
     listOfAllDicts = []
@@ -94,12 +95,14 @@ def Compute_dist_by_shifts_bits_using_levenshtein(originalKeyStr, monitoredKeysS
 
 def FinedAllMinimumsDicts(listOfAllDicts, distValuesList, numberOfAvalibleKeys, len):
     """
-    this function 
+        this function finds all the minimus distances in
+         
     :param listOfAllDicts: 
     :param distValuesList: 
     :param numberOfAvalibleKeys: 
     :param len: 
-    :return: 
+    :return listOfAllDictsWithMinimumDist: 
+    :return allMinmunsIndex: 
     """
     listOfAllDictsWithMinimumDist = []
     allMinmunsIndex = []
